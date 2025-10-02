@@ -14,7 +14,7 @@ import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/marvel-rivals-leaderboard/',
+  base: '/whos-better-at-rivals/',
   plugins: [
     VueRouter({
       dts: 'src/typed-router.d.ts',
