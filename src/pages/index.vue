@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="px-4 px-md-6">
     <!-- Loading Screen -->
     <v-fade-transition>
       <div
@@ -87,9 +87,9 @@
 
     <!-- Leaderboard Content -->
     <v-fade-transition>
-      <div v-if="!playersStore.isLoading && playersStore.allPlayersLoaded" class="py-6">
+      <div v-if="!playersStore.isLoading && playersStore.allPlayersLoaded" class="py-8">
         <!-- Header -->
-        <div class="text-center mb-10">
+        <div class="text-center mb-12">
           <div class="mb-4">
             <v-icon
               class="header-icon"
@@ -113,7 +113,7 @@
         </div>
 
         <!-- Refresh Button -->
-        <v-card class="mb-4" color="primary-darken-1" elevation="2" rounded="lg">
+        <v-card class="mb-6" color="primary-darken-1" elevation="4" rounded="lg">
           <v-card-text :class="mobile ? 'pa-3' : 'pa-4'">
             <div class="d-flex align-center justify-space-between gap-4">
               <div class="flex-grow-1">
