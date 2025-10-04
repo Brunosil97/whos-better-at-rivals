@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-card class="mb-4" color="surface-variant" elevation="2" rounded="lg">
-      <v-card-title class="d-flex align-center justify-space-between py-3">
-        <span class="text-subtitle-1 font-weight-bold">
+      <v-card-title :class="mobile ? 'flex-column align-start' : 'd-flex align-center justify-space-between'" class="py-3">
+        <span class="text-subtitle-1 font-weight-bold" :class="{ 'mb-2': mobile }">
           <v-icon class="mr-2" color="primary" icon="mdi-podium" size="20" />
           Player Rankings
         </span>
@@ -11,13 +11,14 @@
           color="primary"
           mandatory
           selected-class="bg-primary"
+          :class="{ 'overflow-x-auto': mobile }"
         >
-          <v-chip size="small" value="overall" variant="flat">Overall</v-chip>
-          <v-chip size="small" value="rank" variant="flat">Rank</v-chip>
-          <v-chip size="small" value="winRate" variant="flat">Win %</v-chip>
-          <v-chip size="small" value="kd" variant="flat">K/D</v-chip>
-          <v-chip size="small" value="kda" variant="flat">KDA</v-chip>
-          <v-chip size="small" value="kills" variant="flat">Kills</v-chip>
+          <v-chip :size="mobile ? 'x-small' : 'small'" value="overall" variant="flat">Overall</v-chip>
+          <v-chip :size="mobile ? 'x-small' : 'small'" value="rank" variant="flat">Rank</v-chip>
+          <v-chip :size="mobile ? 'x-small' : 'small'" value="winRate" variant="flat">Win %</v-chip>
+          <v-chip :size="mobile ? 'x-small' : 'small'" value="kd" variant="flat">K/D</v-chip>
+          <v-chip :size="mobile ? 'x-small' : 'small'" value="kda" variant="flat">KDA</v-chip>
+          <v-chip :size="mobile ? 'x-small' : 'small'" value="kills" variant="flat">Kills</v-chip>
         </v-chip-group>
       </v-card-title>
     </v-card>
@@ -243,10 +244,12 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue'
+  import { useDisplay } from 'vuetify'
   import { usePlayersStore, type PlayerWithStats } from '@/stores/players'
 
   const playersStore = usePlayersStore()
   const sortBy = ref('overall')
+  const { mobile } = useDisplay()
 
   const sortedPlayers = computed(() => {
     return playersStore.sortedPlayers(sortBy.value)
