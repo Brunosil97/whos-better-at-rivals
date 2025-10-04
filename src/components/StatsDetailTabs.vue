@@ -4,24 +4,26 @@
       v-model="tab"
       bg-color="surface-variant"
       color="primary"
-      grow
-      height="64"
+      :grow="!mobile"
+      :height="mobile ? 56 : 64"
+      :density="mobile ? 'compact' : 'default'"
+      show-arrows
     >
-      <v-tab class="text-none font-weight-medium" value="all">
-        <v-icon icon="mdi-chart-bar" size="large" start />
-        All Stats
+      <v-tab class="text-none font-weight-medium" :class="{ 'px-2': mobile }" value="all">
+        <v-icon :icon="mobile ? 'mdi-chart-bar' : 'mdi-chart-bar'" :size="mobile ? 'default' : 'large'" :start="!mobile" />
+        <span v-if="!mobile">All Stats</span>
       </v-tab>
-      <v-tab class="text-none font-weight-medium" value="heroes">
-        <v-icon icon="mdi-account-multiple" size="large" start />
-        Heroes
+      <v-tab class="text-none font-weight-medium" :class="{ 'px-2': mobile }" value="heroes">
+        <v-icon :icon="mobile ? 'mdi-account-multiple' : 'mdi-account-multiple'" :size="mobile ? 'default' : 'large'" :start="!mobile" />
+        <span v-if="!mobile">Heroes</span>
       </v-tab>
-      <v-tab class="text-none font-weight-medium" value="maps">
-        <v-icon icon="mdi-map" size="large" start />
-        Maps
+      <v-tab class="text-none font-weight-medium" :class="{ 'px-2': mobile }" value="maps">
+        <v-icon :icon="mobile ? 'mdi-map' : 'mdi-map'" :size="mobile ? 'default' : 'large'" :start="!mobile" />
+        <span v-if="!mobile">Maps</span>
       </v-tab>
-      <v-tab class="text-none font-weight-medium" value="recent">
-        <v-icon icon="mdi-history" size="large" start />
-        Recent
+      <v-tab class="text-none font-weight-medium" :class="{ 'px-2': mobile }" value="recent">
+        <v-icon :icon="mobile ? 'mdi-history' : 'mdi-history'" :size="mobile ? 'default' : 'large'" :start="!mobile" />
+        <span v-if="!mobile">Recent</span>
       </v-tab>
     </v-tabs>
 
@@ -29,52 +31,60 @@
       <!-- All Stats Tab -->
       <v-window-item value="all">
         <v-card-text>
-          <v-table>
-            <thead>
-              <tr>
-                <th>Player</th>
-                <th class="text-center">Win Rate</th>
-                <th class="text-center">K/D</th>
-                <th class="text-center">KDA</th>
-                <th class="text-center">Kills</th>
-                <th class="text-center">Assists</th>
-                <th class="text-center">MVP</th>
-                <th class="text-center">SVP</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="player in players" :key="player.uid">
-                <td>
-                  <div class="d-flex align-center">
-                    <v-avatar class="mr-2" size="32">
-                      <v-img
-                        :alt="player.name"
-                        :src="`https://marvelrivalsapi.com${player.data?.player.icon.player_icon}`"
-                      />
-                    </v-avatar>
-                    <span class="font-weight-medium">{{ player.data?.name }}</span>
-                  </div>
-                </td>
-                <td class="text-center">
-                  <v-chip :color="getWinRateColor(player.stats.winRate)" size="small">
-                    {{ player.stats.winRate.toFixed(1) }}%
-                  </v-chip>
-                </td>
-                <td class="text-center">{{ player.stats.kd.toFixed(2) }}</td>
-                <td class="text-center">{{ player.stats.kda.toFixed(2) }}</td>
-                <td class="text-center">{{ player.stats.totalKills }}</td>
-                <td class="text-center">{{ player.stats.totalAssists }}</td>
-                <td class="text-center">
-                  <v-icon color="amber" icon="mdi-trophy" size="small" />
-                  {{ player.stats.totalMVP }}
-                </td>
-                <td class="text-center">
-                  <v-icon color="blue" icon="mdi-star" size="small" />
-                  {{ player.stats.totalSVP }}
-                </td>
-              </tr>
-            </tbody>
-          </v-table>
+          <v-data-table
+            :headers="headers"
+            :items="players"
+            :mobile="mobile"
+            item-value="uid"
+          >
+            <template #item.player="{ item }">
+              <div class="d-flex align-center">
+                <v-avatar class="mr-2" size="32">
+                  <v-img
+                    :alt="item.name"
+                    :src="`https://marvelrivalsapi.com${item.data?.player.icon.player_icon}`"
+                  />
+                </v-avatar>
+                <span class="font-weight-medium">{{ item.data?.name }}</span>
+              </div>
+            </template>
+
+            <template #item.stats.winRate="{ item }">
+              <v-chip :color="getWinRateColor(item.stats.winRate)" size="small">
+                {{ item.stats.winRate.toFixed(1) }}%
+              </v-chip>
+            </template>
+
+            <template #item.stats.kd="{ item }">
+              {{ item.stats.kd.toFixed(2) }}
+            </template>
+
+            <template #item.stats.kda="{ item }">
+              {{ item.stats.kda.toFixed(2) }}
+            </template>
+
+            <template #item.stats.totalKills="{ item }">
+              {{ item.stats.totalKills }}
+            </template>
+
+            <template #item.stats.totalAssists="{ item }">
+              {{ item.stats.totalAssists }}
+            </template>
+
+            <template #item.stats.totalMVP="{ item }">
+              <div class="d-flex align-center justify-center">
+                <v-icon color="amber" icon="mdi-trophy" size="small" />
+                <span class="ml-1">{{ item.stats.totalMVP }}</span>
+              </div>
+            </template>
+
+            <template #item.stats.totalSVP="{ item }">
+              <div class="d-flex align-center justify-center">
+                <v-icon color="blue" icon="mdi-star" size="small" />
+                <span class="ml-1">{{ item.stats.totalSVP }}</span>
+              </div>
+            </template>
+          </v-data-table>
         </v-card-text>
       </v-window-item>
 
@@ -261,12 +271,25 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue'
+  import { useDisplay } from 'vuetify'
   import { usePlayersStore, type PlayerWithStats } from '@/stores/players'
 
   const playersStore = usePlayersStore()
   const tab = ref('all')
+  const { mobile } = useDisplay()
 
   const players = computed(() => playersStore.playersWithStats)
+
+  const headers = [
+    { title: 'Player', key: 'player', align: 'start' as const, sortable: false },
+    { title: 'Win Rate', key: 'stats.winRate', align: 'center' as const },
+    { title: 'K/D', key: 'stats.kd', align: 'center' as const },
+    { title: 'KDA', key: 'stats.kda', align: 'center' as const },
+    { title: 'Kills', key: 'stats.totalKills', align: 'center' as const },
+    { title: 'Assists', key: 'stats.totalAssists', align: 'center' as const },
+    { title: 'MVP', key: 'stats.totalMVP', align: 'center' as const },
+    { title: 'SVP', key: 'stats.totalSVP', align: 'center' as const },
+  ]
 
   function getWinRateColor (winRate: number) {
     if (winRate >= 60) return 'success'
