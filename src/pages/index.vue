@@ -114,10 +114,10 @@
 
         <!-- Refresh Button -->
         <v-card class="mb-4" color="primary-darken-1" elevation="2" rounded="lg">
-          <v-card-text class="pa-4">
+          <v-card-text :class="mobile ? 'pa-3' : 'pa-4'">
             <div class="d-flex align-center justify-space-between gap-4">
               <div class="flex-grow-1">
-                <div class="text-subtitle-2 font-weight-bold mb-1">Update Player Stats</div>
+                <div :class="mobile ? 'text-caption' : 'text-subtitle-2'" class="font-weight-bold mb-1">Update Player Stats</div>
                 <div class="text-caption" style="opacity: 0.9;">
                   <span v-if="!canRefresh">
                     Next refresh available in {{ formatTimeRemaining(timeUntilRefresh) }}
@@ -128,6 +128,7 @@
                 </div>
               </div>
               <v-btn
+                v-if="!mobile"
                 color="white"
                 :disabled="isRefreshing || !canRefresh"
                 :loading="isRefreshing"
@@ -138,6 +139,15 @@
               >
                 Refresh
               </v-btn>
+              <v-btn
+                v-else
+                color="white"
+                :disabled="isRefreshing || !canRefresh"
+                :loading="isRefreshing"
+                icon="mdi-refresh"
+                variant="flat"
+                @click="refreshAllPlayers"
+              />
             </div>
           </v-card-text>
         </v-card>
@@ -162,6 +172,7 @@
 
 <script lang="ts" setup>
   import { computed, onMounted, onUnmounted, ref } from 'vue'
+  import { useDisplay } from 'vuetify'
   import LeaderboardCards from '@/components/LeaderboardCards.vue'
   import StatLeaders from '@/components/StatLeaders.vue'
   import StatsDetailTabs from '@/components/StatsDetailTabs.vue'
@@ -169,6 +180,7 @@
   import { updatePlayerStats, canUpdatePlayer, getTimeUntilNextUpdate, setPlayerUpdateTime } from '@/services/api'
 
   const playersStore = usePlayersStore()
+  const { mobile } = useDisplay()
   const isRefreshing = ref(false)
   const canRefresh = ref(true)
   const timeUntilRefresh = ref(0)
