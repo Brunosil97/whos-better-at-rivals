@@ -66,16 +66,15 @@ export const usePlayersStore = defineStore('players', {
           const ranked = p.data!.overall_stats.ranked
 
           // Convert rank to numeric level for comparison
-          // Rank order: Bronze < Silver < Gold < Diamond < Platinum < Grandmaster < Eternity < One Above All
+          // Rank order: Bronze < Gold < Platinum < Diamond < Grandmaster < Eternity < One Above All
           // Within a tier: III < II < I (so Platinum I > Platinum II > Platinum III)
           const rankMap: Record<string, number> = {
             'Bronze III': 1, 'Bronze II': 2, 'Bronze I': 3,
-            'Silver III': 4, 'Silver II': 5, 'Silver I': 6,
-            'Gold III': 7, 'Gold II': 8, 'Gold I': 9,
+            'Gold III': 4, 'Gold II': 5, 'Gold I': 6,
+            'Platinum III': 7, 'Platinum II': 8, 'Platinum I': 9,
             'Diamond III': 10, 'Diamond II': 11, 'Diamond I': 12,
-            'Platinum III': 13, 'Platinum II': 14, 'Platinum I': 15,
-            'Grandmaster III': 16, 'Grandmaster II': 17, 'Grandmaster I': 18,
-            'Eternity': 19, 'One Above All': 20,
+            'Grandmaster III': 13, 'Grandmaster II': 14, 'Grandmaster I': 15,
+            'Eternity': 16, 'One Above All': 17,
           }
           const rankLevel = rankMap[p.data!.player.rank.rank] || 0
           const rankScore = 0
@@ -182,42 +181,26 @@ export const usePlayersStore = defineStore('players', {
         const breakdown: Record<string, number> = {}
 
         for (const category of statCategories) {
-          // Sort players by this stat (descending)
-          const sorted = [...players].toSorted((a, b) =>
-            b.stats[category.key] - a.stats[category.key],
-          )
-
           // Get current player's stat value
           const playerValue = player.stats[category.key]
 
-          // Count how many players have a BETTER stat (higher value)
-          const betterCount = sorted.filter(p => p.stats[category.key] > playerValue).length
+          // Get all unique stat values sorted descending
+          const uniqueValues = [...new Set(players.map(p => p.stats[category.key]))]
+            .toSorted((a, b) => b - a)
 
-          // Award points based on position, handling ties
-          // Players with same value get same points
+          // Find which unique value rank this player is at (0-indexed)
+          const valueRank = uniqueValues.indexOf(playerValue)
+
+          // Award points based on value rank (joint 1st = 4pts, joint 2nd = 3pts, joint 3rd = 2pts, joint 4th = 1pt)
           let points = 0
-          switch (betterCount) {
-            case 0: {
-              points = 4
-
-              break
-            }
-            case 1: {
-              points = 3
-
-              break
-            }
-            case 2: {
-              points = 2
-
-              break
-            }
-            case 3: {
-              points = 1
-
-              break
-            }
-          // No default
+          if (valueRank === 0) {
+            points = 4 // 1st place (or joint 1st)
+          } else if (valueRank === 1) {
+            points = 3 // 2nd place (or joint 2nd)
+          } else if (valueRank === 2) {
+            points = 2 // 3rd place (or joint 3rd)
+          } else if (valueRank === 3) {
+            points = 1 // 4th place (or joint 4th)
           }
 
           totalPoints += points
