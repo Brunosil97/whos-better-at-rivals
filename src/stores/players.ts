@@ -65,8 +65,19 @@ export const usePlayersStore = defineStore('players', {
         .map(p => {
           const ranked = p.data!.overall_stats.ranked
 
-          // Use rank data directly from API
-          const rankLevel = 0
+          // Convert rank to numeric level for comparison
+          // Rank order: Bronze < Silver < Gold < Diamond < Platinum < Grandmaster < Eternity < One Above All
+          // Within a tier: III < II < I (so Platinum I > Platinum II > Platinum III)
+          const rankMap: Record<string, number> = {
+            'Bronze III': 1, 'Bronze II': 2, 'Bronze I': 3,
+            'Silver III': 4, 'Silver II': 5, 'Silver I': 6,
+            'Gold III': 7, 'Gold II': 8, 'Gold I': 9,
+            'Diamond III': 10, 'Diamond II': 11, 'Diamond I': 12,
+            'Platinum III': 13, 'Platinum II': 14, 'Platinum I': 15,
+            'Grandmaster III': 16, 'Grandmaster II': 17, 'Grandmaster I': 18,
+            'Eternity': 19, 'One Above All': 20,
+          }
+          const rankLevel = rankMap[p.data!.player.rank.rank] || 0
           const rankScore = 0
 
           // Calculate stats
