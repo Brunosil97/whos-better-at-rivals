@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="mb-4" color="surface-variant" elevation="2" rounded="lg">
+    <v-card class="mb-6" color="surface-variant" elevation="4" rounded="lg">
       <v-card-title :class="mobile ? 'flex-column align-start' : 'd-flex align-center justify-space-between'" class="py-3">
         <span class="text-subtitle-1 font-weight-bold" :class="{ 'mb-2': mobile }">
           <v-icon class="mr-2" color="primary" icon="mdi-podium" size="20" />
@@ -26,9 +26,9 @@
     <!-- Overall Ranking Info Card -->
     <v-card
       v-if="sortBy === 'overall'"
-      class="mb-4"
+      class="mb-6"
       color="primary-darken-1"
-      elevation="2"
+      elevation="4"
       rounded="lg"
     >
       <v-card-text class="pa-4">
@@ -59,12 +59,10 @@
         <v-card
           class="player-card"
           :class="{
-            'first-place': index === 0,
-            'second-place': index === 1,
-            'third-place': index === 2
+            'first-place': index === 0
           }"
-          :elevation="index === 0 ? 12 : 6"
-          rounded="lg"
+          :elevation="index === 0 ? 16 : 6"
+          rounded="xl"
         >
           <v-card-text class="pb-0">
             <div class="d-flex align-center mb-4">
@@ -72,11 +70,18 @@
                 <v-avatar
                   size="80"
                   :style="getRankBorderStyle(player)"
+                  color="grey-darken-2"
                 >
                   <v-img
                     :alt="player.name"
                     :src="`https://marvelrivalsapi.com${player.data.player.icon.player_icon}`"
-                  />
+                  >
+                    <template #error>
+                      <div class="d-flex align-center justify-center h-100">
+                        <v-icon icon="mdi-account-circle" size="60" color="grey-lighten-1" />
+                      </div>
+                    </template>
+                  </v-img>
                 </v-avatar>
                 <v-avatar
                   class="position-absolute"
@@ -343,27 +348,25 @@
 <style scoped>
 .player-card {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: rgba(var(--v-theme-surface), 0.9);
-  backdrop-filter: blur(10px);
+  background: rgba(var(--v-theme-surface), 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .player-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3) !important;
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4) !important;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .first-place {
-  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(var(--v-theme-surface), 0.95) 100%);
-  border: 2px solid rgba(255, 193, 7, 0.3);
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(var(--v-theme-surface), 0.95) 100%);
+  border: 2px solid rgba(255, 193, 7, 0.4);
+  box-shadow: 0 0 30px rgba(255, 193, 7, 0.2);
 }
 
-.second-place {
-  background: linear-gradient(135deg, rgba(189, 189, 189, 0.1) 0%, rgba(var(--v-theme-surface), 0.95) 100%);
-  border: 2px solid rgba(189, 189, 189, 0.2);
-}
-
-.third-place {
-  background: linear-gradient(135deg, rgba(205, 127, 50, 0.1) 0%, rgba(var(--v-theme-surface), 0.95) 100%);
-  border: 2px solid rgba(205, 127, 50, 0.2);
+.first-place:hover {
+  border-color: rgba(255, 193, 7, 0.6);
+  box-shadow: 0 0 40px rgba(255, 193, 7, 0.3) !important;
 }
 </style>

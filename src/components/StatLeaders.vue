@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-card class="mb-3" color="surface-variant" elevation="2" rounded="lg">
-      <v-card-title class="text-subtitle-1 font-weight-bold d-flex align-center py-3">
-        <v-icon class="mr-2" color="amber-accent-3" icon="mdi-trophy-variant" size="20" />
+    <v-card class="mb-4" color="surface-variant" elevation="4" rounded="lg">
+      <v-card-title class="text-subtitle-1 font-weight-bold d-flex align-center py-4">
+        <v-icon class="mr-2" color="amber-accent-3" icon="mdi-trophy-variant" size="24" />
         Stat Leaders
       </v-card-title>
     </v-card>
@@ -11,23 +11,13 @@
       <v-card
         v-for="(leader, key) in leaderCards"
         :key="key"
-        class="mb-2 leader-card"
-        elevation="2"
+        class="mb-3 leader-card"
+        elevation="4"
         rounded="lg"
       >
-        <v-card-text class="pa-3">
+        <v-card-text class="pa-4">
           <div class="d-flex align-center">
-            <v-icon class="mr-2" :color="leader.chipColor" :icon="leader.icon" size="20" />
-            <v-avatar
-              class="mr-2"
-              size="40"
-            >
-              <v-img
-                :alt="leader.player.name"
-                :src="`https://marvelrivalsapi.com${leader.player.data.player.icon.player_icon}`"
-              />
-            </v-avatar>
-
+            <v-icon class="mr-3" :color="leader.chipColor" :icon="leader.icon" size="24" />
             <div class="flex-grow-1">
               <div class="text-caption text-medium-emphasis mb-1">
                 {{ leader.title }}

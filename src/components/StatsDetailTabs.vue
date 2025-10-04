@@ -39,11 +39,15 @@
           >
             <template #item.player="{ item }">
               <div class="d-flex align-center">
-                <v-avatar class="mr-2" size="32">
+                <v-avatar class="mr-2" size="32" color="surface-variant">
                   <v-img
                     :alt="item.name"
                     :src="`https://marvelrivalsapi.com${item.data?.player.icon.player_icon}`"
-                  />
+                  >
+                    <template #error>
+                      <v-icon icon="mdi-account-circle" size="24" />
+                    </template>
+                  </v-img>
                 </v-avatar>
                 <span class="font-weight-medium">{{ item.data?.name }}</span>
               </div>
@@ -100,11 +104,15 @@
             >
               <v-card elevation="2" rounded="lg">
                 <v-card-title class="d-flex align-center">
-                  <v-avatar class="mr-2" size="40">
+                  <v-avatar class="mr-2" size="40" color="surface-variant">
                     <v-img
                       :alt="player.name"
                       :src="`https://marvelrivalsapi.com${player.data?.player.icon.player_icon}`"
-                    />
+                    >
+                      <template #error>
+                        <v-icon icon="mdi-account-circle" size="32" />
+                      </template>
+                    </v-img>
                   </v-avatar>
                   {{ player.data?.name }}'s Heroes
                 </v-card-title>
@@ -166,11 +174,15 @@
             >
               <v-card elevation="2" rounded="lg">
                 <v-card-title class="d-flex align-center">
-                  <v-avatar class="mr-2" size="40">
+                  <v-avatar class="mr-2" size="40" color="surface-variant">
                     <v-img
                       :alt="player.name"
                       :src="`https://marvelrivalsapi.com${player.data?.player.icon.player_icon}`"
-                    />
+                    >
+                      <template #error>
+                        <v-icon icon="mdi-account-circle" size="32" />
+                      </template>
+                    </v-img>
                   </v-avatar>
                   {{ player.data?.name }}'s Maps
                 </v-card-title>
@@ -219,11 +231,15 @@
             >
               <v-card elevation="2" rounded="lg">
                 <v-card-title class="d-flex align-center">
-                  <v-avatar class="mr-2" size="40">
+                  <v-avatar class="mr-2" size="40" color="surface-variant">
                     <v-img
                       :alt="player.name"
                       :src="`https://marvelrivalsapi.com${player.data?.player.icon.player_icon}`"
-                    />
+                    >
+                      <template #error>
+                        <v-icon icon="mdi-account-circle" size="32" />
+                      </template>
+                    </v-img>
                   </v-avatar>
                   {{ player.data?.name }}'s Recent Matches
                 </v-card-title>
